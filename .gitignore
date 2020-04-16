@@ -1,2 +1,11 @@
-#Dependencies
+# macOS
+.DS_Store
+
+# Dependencies
 node_modules/
+
+# jest coverage
+coverage/
+
+# code
+.vscode/

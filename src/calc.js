@@ -3,17 +3,25 @@
 const { data } = require('./data');
 
 // eslint-disable-next-line no-underscore-dangle
-const _product = (arr) => {
-  let p = 1.0;
-  // TODO:: not sure if this is equivelent, test later
-  // arr.reduce((element) => {
-  //   return p *= element;
-  // })
+// const _product = (arr) => {
+//   let p = 1.0;
+//   // TODO:: not sure if this is equivelent, test later
+//   // arr.reduce((element) => {
+//   //   return p *= element;
+//   // })
 
-  for (let i = 0; i < arr.length; i += 1) {
-    p *= arr[i];
+//   for (let i = 0; i < arr.length; i += 1) {
+//     p *= arr[i];
+//   }
+//   return p;
+// };
+
+const _product = function(arr) {
+  var p = 1.0
+  for (var i = 0; i < arr.length; i++) {
+      p *= arr[i]
   }
-  return p;
+  return p
 };
 
 /*
@@ -21,43 +29,83 @@ const _product = (arr) => {
  * Roughly equivalent to Python's itertools.product function
  *
  * */
-const product = (...args) => args.reduce((accumulator, value) => {
-  const tmp = [];
-  accumulator.forEach((accum) => {
-    value.forEach((val) => {
-      tmp.push(accum.concat(val));
-    });
-  });
-  return tmp;
-}, [[]]);
-
-const rollDice = (dice, base) => {
-  let probabilities = [1.0];
-
-  dice.forEach((die) => {
-    const newSize = probabilities.length + die - 1;
-    const newArr = [];
-    for (let i = 0; i < newSize; i += 1) {
-      newArr.push(0.0);
-    }
-    let total = 0;
-    for (let i = 0; i < newSize; i += 1) {
-      if (i < probabilities.length) {
-        total += probabilities[i];
+const product = function() {
+  var args = Array.prototype.slice.call(arguments); // makes array from arguments
+  return args.reduce(function tl(accumulator, value) {
+      var tmp = [];
+      for (var i = 0; i < accumulator.length; i++) {
+          for (var i2 = 0; i2 < value.length; i2++) {
+              tmp.push(accumulator[i].concat(value[i2]));
+          }
       }
-      if ((i - die) >= 0) {
-        total -= probabilities[i - die];
-      }
-      newArr[i] = (total * 1.0) / die;
-    }
-    probabilities = newArr;
-  });
-  const baseProbs = [];
-  for (let i = 0; i < base; i += 1) {
-    baseProbs.push(0.0);
-  }
-  return baseProbs.concat(probabilities);
+      return tmp;
+  }, [
+      []
+  ]);
 };
+// const product = (...args) => args.reduce((accumulator, value) => {
+//   const tmp = [];
+//   accumulator.forEach((accum) => {
+//     value.forEach((val) => {
+//       tmp.push(accum.concat(val));
+//     });
+//   });
+//   return tmp;
+// }, [[]]);
+
+const rollDice = function(dice, base) {
+  var probabilities = [1.0]
+  for (var i = 0; i < dice.length; i++) {
+      var newSize = probabilities.length + dice[i] - 1 //60
+      var newArr = []
+      for (var i2 = 0; i2 < newSize; i2++) { //60x
+          newArr.push(0.0) //newArr is 60 elements of 0.0
+      }
+      var total = 0
+      for (var i3 = 0; i3 < newSize; i3++) { //60x
+          if (i3 < probabilities.length) { // starts at 1
+              total += probabilities[i3] // + 1.0 
+          }
+          if ((i3 - dice[i]) >= 0) {
+              total -= probabilities[i3 - dice[i]]
+          }
+          newArr[i3] = (total * 1.0) / dice[i]
+      }
+      probabilities = newArr
+  }
+  var baseProbs = []
+  for (var i4 = 0; i4 < base; i4++) {
+      baseProbs.push(0.0)
+  }
+  return baseProbs.concat(probabilities)
+};
+// const rollDice = (dice, base) => {
+//   let probabilities = [1.0];
+
+//   dice.forEach((die) => {
+//     const newSize = probabilities.length + die - 1;
+//     const newArr = [];
+//     for (let i = 0; i < newSize; i += 1) {
+//       newArr.push(0.0);
+//     }
+//     let total = 0;
+//     for (let i = 0; i < newSize; i += 1) {
+//       if (i < probabilities.length) {
+//         total += probabilities[i];
+//       }
+//       if ((i - die) >= 0) {
+//         total -= probabilities[i - die];
+//       }
+//       newArr[i] = (total * 1.0) / die;
+//     }
+//     probabilities = newArr;
+//   });
+//   const baseProbs = [];
+//   for (let i = 0; i < base; i += 1) {
+//     baseProbs.push(0.0);
+//   }
+//   return baseProbs.concat(probabilities);
+// };
 
 
 /*
@@ -75,41 +123,78 @@ const rollDice = (dice, base) => {
  *     ]
  *     quicksort(0, (perkArr.length - 1), perkArr, function (x, y) { return x.cost - y.cost })
  * */
-const quicksort = (low, high, arr, compare) => {
-  // eslint-disable-next-line no-bitwise
-  const pivotIndex = (~~((low + high) / 2)); // floor division
-  const pivotValue = arr[pivotIndex];
-  arr[pivotIndex] = arr[high];
-  arr[high] = pivotValue;
-  let counter = low;
-  let loopIndex = low;
+const quicksort = function(low, high, arr, compare) {
+  var pivot_index = (~~((low + high) / 2)) // floor division
+  var pivot_value = arr[pivot_index]
+  arr[pivot_index] = arr[high]
+  arr[high] = pivot_value
+  var counter = low
+  var loop_index = low
 
-  while (loopIndex < high) {
-    // eslint-disable-next-line no-bitwise
-    if (compare(arr[loopIndex], pivotValue) < (loopIndex & 1)) {
-      const tmp = arr[loopIndex];
-      arr[loopIndex] = arr[counter];
-      arr[counter] = tmp;
-      counter += 1;
-    }
-    loopIndex += 1;
+  while (loop_index < high) {
+      if (compare(arr[loop_index], pivot_value) < (loop_index & 1)) {
+          var tmp = arr[loop_index]
+          arr[loop_index] = arr[counter]
+          arr[counter] = tmp
+          counter = counter + 1
+      }
+      loop_index = loop_index + 1
   }
 
-  arr[high] = arr[counter];
-  arr[counter] = pivotValue;
+  arr[high] = arr[counter]
+  arr[counter] = pivot_value
 
   if (low < (counter - 1)) {
-    quicksort(low, counter - 1, arr, compare);
+      quicksort(low, counter - 1, arr, compare)
   }
   if ((counter + 1) < high) {
-    quicksort(counter + 1, high, arr, compare);
+      quicksort(counter + 1, high, arr, compare)
   }
 };
+// const quicksort = (low, high, arr, compare) => {
+//   // eslint-disable-next-line no-bitwise
+//   const pivotIndex = (~~((low + high) / 2)); // floor division
+//   const pivotValue = arr[pivotIndex];
+//   arr[pivotIndex] = arr[high];
+//   arr[high] = pivotValue;
+//   let counter = low;
+//   let loopIndex = low;
 
-/**
-* Roughly equivalent to Python's zip function
-* */
-const zip = (arrays) => arrays[0].map((_, i) => arrays.map((array) => array[i]));
+//   while (loopIndex < high) {
+//     // eslint-disable-next-line no-bitwise
+//     if (compare(arr[loopIndex], pivotValue) < (loopIndex & 1)) {
+//       const tmp = arr[loopIndex];
+//       arr[loopIndex] = arr[counter];
+//       arr[counter] = tmp;
+//       counter += 1;
+//     }
+//     loopIndex += 1;
+//   }
+
+//   arr[high] = arr[counter];
+//   arr[counter] = pivotValue;
+
+//   if (low < (counter - 1)) {
+//     quicksort(low, counter - 1, arr, compare);
+//   }
+//   if ((counter + 1) < high) {
+//     quicksort(counter + 1, high, arr, compare);
+//   }
+// };
+
+// /**
+// * Roughly equivalent to Python's zip function
+// * */
+// const zip = (arrays) => arrays[0].map((_, i) => arrays.map((array) => array[i]));
+
+const zip = function(arrays) {
+  return arrays[0].map(function(_, i) {
+      return arrays.map(function(array) {
+          return array[i]
+      })
+  });
+};
+
 
 // exports.getMaterialsProb = (invLevel, gizmoType, matsUsed, ancient) => {
 //   const bases = {};
