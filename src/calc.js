@@ -29,33 +29,18 @@ const _product = function(arr) {
  * Roughly equivalent to Python's itertools.product function
  *
  * */
-const product = function() {
-  var args = Array.prototype.slice.call(arguments); // makes array from arguments
-  return args.reduce(function tl(accumulator, value) {
-      var tmp = [];
-      for (var i = 0; i < accumulator.length; i++) {
-          for (var i2 = 0; i2 < value.length; i2++) {
-              tmp.push(accumulator[i].concat(value[i2]));
-          }
-      }
-      return tmp;
-  }, [
-      []
-  ]);
-};
-// const product = (...args) => args.reduce((accumulator, value) => {
-//   const tmp = [];
-//   accumulator.forEach((accum) => {
-//     value.forEach((val) => {
-//       tmp.push(accum.concat(val));
-//     });
-//   });
-//   return tmp;
-// }, [[]]);
+const product = (...args) => args.reduce((accumulator, value) => {
+  const tmp = [];
+  accumulator.forEach((accum) => {
+    value.forEach((val) => {
+      tmp.push(accum.concat(val));
+    });
+  });
+  return tmp;
+}, [[]]);
 
 const rollDice = (dice, base) => {
   let probabilities = [1.0];
-
   dice.forEach((die) => {
     const newSize = probabilities.length + die - 1;
     const newArr = [];
