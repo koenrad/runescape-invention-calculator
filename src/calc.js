@@ -53,59 +53,33 @@ const product = function() {
 //   return tmp;
 // }, [[]]);
 
-const rollDice = function(dice, base) {
-  var probabilities = [1.0]
-  for (var i = 0; i < dice.length; i++) {
-      var newSize = probabilities.length + dice[i] - 1 //60
-      var newArr = []
-      for (var i2 = 0; i2 < newSize; i2++) { //60x
-          newArr.push(0.0) //newArr is 60 elements of 0.0
-      }
-      var total = 0
-      for (var i3 = 0; i3 < newSize; i3++) { //60x
-          if (i3 < probabilities.length) { // starts at 1
-              total += probabilities[i3] // + 1.0 
-          }
-          if ((i3 - dice[i]) >= 0) {
-              total -= probabilities[i3 - dice[i]]
-          }
-          newArr[i3] = (total * 1.0) / dice[i]
-      }
-      probabilities = newArr
-  }
-  var baseProbs = []
-  for (var i4 = 0; i4 < base; i4++) {
-      baseProbs.push(0.0)
-  }
-  return baseProbs.concat(probabilities)
-};
-// const rollDice = (dice, base) => {
-//   let probabilities = [1.0];
+const rollDice = (dice, base) => {
+  let probabilities = [1.0];
 
-//   dice.forEach((die) => {
-//     const newSize = probabilities.length + die - 1;
-//     const newArr = [];
-//     for (let i = 0; i < newSize; i += 1) {
-//       newArr.push(0.0);
-//     }
-//     let total = 0;
-//     for (let i = 0; i < newSize; i += 1) {
-//       if (i < probabilities.length) {
-//         total += probabilities[i];
-//       }
-//       if ((i - die) >= 0) {
-//         total -= probabilities[i - die];
-//       }
-//       newArr[i] = (total * 1.0) / die;
-//     }
-//     probabilities = newArr;
-//   });
-//   const baseProbs = [];
-//   for (let i = 0; i < base; i += 1) {
-//     baseProbs.push(0.0);
-//   }
-//   return baseProbs.concat(probabilities);
-// };
+  dice.forEach((die) => {
+    const newSize = probabilities.length + die - 1;
+    const newArr = [];
+    for (let i = 0; i < newSize; i += 1) {
+      newArr.push(0.0);
+    }
+    let total = 0;
+    for (let i = 0; i < newSize; i += 1) {
+      if (i < probabilities.length) {
+        total += probabilities[i];
+      }
+      if ((i - die) >= 0) {
+        total -= probabilities[i - die];
+      }
+      newArr[i] = (total * 1.0) / die;
+    }
+    probabilities = newArr;
+  });
+  const baseProbs = [];
+  for (let i = 0; i < base; i += 1) {
+    baseProbs.push(0.0);
+  }
+  return baseProbs.concat(probabilities);
+};
 
 
 /*
